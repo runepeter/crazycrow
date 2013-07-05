@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="CrazyCrowApp">
+<head>
+    <meta charset="utf-8">
+    <title>Workshop :: AngularJS+jRebel</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="css/app.css" rel="stylesheet">
+</head>
+
+<body>
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container-fluid">
+
+            <a class="brand" href="#">Crazy Crow</a>
+
+            <div class="nav-collapse collapse">
+                <ul class="nav">
+                    <li class="active"><a href="#">Home</a></li>
+                    <li><a href="#/about">About</a></li>
+                    <li><a href="#/contact">Contact</a></li>
+                </ul>
+            </div>
+            <!--/.nav-collapse -->
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span2">
+            <div class="well sidebar-nav">
+                <ul class="nav nav-list">
+                    <li><img class="media-object" src="img/crow.png"></li>
+                    <li class="nav-header">Crows</li>
+                    <li>Filesystem</li>
+                    <li>Database</li>
+                    <li>Operating System</li>
+                    <li>Customer</li>
+                </ul>
+            </div>
+        </div>
+        <div class="span10">
+            <div class="row-fluid">
+                <div ng-view></div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /container -->
+
+<!-- Le javascript
+================================================== -->
+<script src="js/jquery.js"></script>
+<script src="js/angular.js"></script>
+<script src="js/angular-resource.js"></script>
+<script src="js/bootstrap.js"></script>
+<script src="js/services.js"></script>
+<script src="js/controllers.js"></script>
+<script src="js/app.js"></script>
+
+</body>
+</html>

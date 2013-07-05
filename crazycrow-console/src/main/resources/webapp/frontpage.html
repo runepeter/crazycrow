@@ -1,0 +1,17 @@
+<div>
+    <div class="page-header">
+        <h1>Active Crazy Crows</h1>
+    </div>
+    <table class="table table-bordered table-striped">
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Status</th>
+        </tr>
+        <tr ng-repeat="crow in crows">
+            <td>{{crow.name}}</td>
+            <td>{{crow.description}}</td>
+            <td>{{crow.status}}</td>
+        </tr>
+    </table>
+</div>
