@@ -26,15 +26,15 @@ public class NsaRouteBuilder extends SpringRouteBuilder {
                 "&consumerSecret=" + CONSUMER_SECRET +
                 "&accessToken=" + ACCESS_TOKEN +
                 "&accessTokenSecret=" + ACCESS_TOKEN_SECRET)
-                .process(new TwitterPaymentProcessor())
+                .beanRef("twitterPaymentProcessor")
                 .to("direct:paymentInstructions");
 
         from("file://incoming?move=processed&readLock=rename")
-                .process(new FilePaymentProcessor())
+                .beanRef("filePaymentProcessor")
                 .split(body(List.class))
                 .to("direct:paymentInstructions");
 
         from("direct:paymentInstructions")
-                .process(new PaymentInstructionProcessor());
+                .beanRef("paymentInstructionProcessor");
     }
 }
