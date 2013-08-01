@@ -4,7 +4,9 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.impl.DefaultCamelContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import eu.nets.crazycrow.nsa.config.ApplicationConfiguration;
 import twitter4j.Status;
 
 public class NsaApp {
@@ -18,8 +20,11 @@ public class NsaApp {
 		
 		System.setProperty("http.proxyHost", "wpad");
 		System.setProperty("http.proxyPort", "8080");
-		
-		DefaultCamelContext camelContext = new DefaultCamelContext();
+
+        new AnnotationConfigApplicationContext(ApplicationConfiguration.class);
+
+		/*DefaultCamelContext camelContext = new DefaultCamelContext();
+
 		camelContext.addRoutes(new RouteBuilder() {
 			@Override
 			public void configure() throws Exception {
@@ -49,10 +54,9 @@ public class NsaApp {
 			}
 		});
 		
-		camelContext.start();
+		camelContext.start();*/
 		
 		Thread.sleep(Long.MAX_VALUE);
-		
 	}
 	
 }
