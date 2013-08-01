@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import twitter4j.Status;
 
-final class TwitterPaymentProcessor implements Processor {
+final public class TwitterPaymentProcessor implements Processor {
 	
 	private final Logger logger = LoggerFactory.getLogger(TwitterPaymentProcessor.class);
 	
@@ -17,7 +17,7 @@ final class TwitterPaymentProcessor implements Processor {
 		exchange.getOut().setBody(toPaymentInstruction(status));
 	}
 
-	static PaymentInstruction toPaymentInstruction(Status status) {
+	public static PaymentInstruction toPaymentInstruction(Status status) {
 		PaymentInstruction paymentInstruction = new PaymentInstruction();
 		paymentInstruction.setSource(Source.Twitter);
 		paymentInstruction.setDebitSocialId(status.getUser().getName());

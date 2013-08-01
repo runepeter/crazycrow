@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Lists;
 
-final class FilePaymentProcessor implements Processor {
+final public class FilePaymentProcessor implements Processor {
 	
 	private final Logger logger = LoggerFactory.getLogger(FilePaymentProcessor.class);
 
