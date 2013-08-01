@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.impl.DefaultCamelContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 
 public class NsaApp {
@@ -42,10 +43,9 @@ public class NsaApp {
 			}
 		});
 		
-		camelContext.start();
+		camelContext.start();*/
 		
 		Thread.sleep(Long.MAX_VALUE);
-		
 	}
 	
 }
