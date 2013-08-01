@@ -1,11 +1,10 @@
 package eu.nets.crazycrow.nsa;
 
-import org.apache.camel.Exchange;
-import org.apache.camel.Processor;
+import java.util.List;
+
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.impl.DefaultCamelContext;
 
-import twitter4j.Status;
 
 public class NsaApp {
 	
@@ -23,29 +22,23 @@ public class NsaApp {
 		camelContext.addRoutes(new RouteBuilder() {
 			@Override
 			public void configure() throws Exception {
-				from("twitter://search?type=polling" +
-						"&keywords=javazone" +
-						"&delay=60" +
-						"&consumerKey=" + CONSUMER_KEY + 
-						"&consumerSecret=" + CONSUMER_SECRET + 
-						"&accessToken=" + ACCESS_TOKEN + 
-						"&accessTokenSecret=" + ACCESS_TOKEN_SECRET)
-					.process(new Processor() {
-						@Override
-						public void process(Exchange exchange) throws Exception {
-							Status status = (Status)exchange.getIn().getBody();
-							
-							System.out.println(status.getUser().getName() + ": " + status.getText());
-						}
-					});
+//				from("twitter://search?type=polling" +
+//						"&keywords=javazone" +
+//						"&delay=60" +
+//						"&consumerKey=" + CONSUMER_KEY + 
+//						"&consumerSecret=" + CONSUMER_SECRET + 
+//						"&accessToken=" + ACCESS_TOKEN + 
+//						"&accessTokenSecret=" + ACCESS_TOKEN_SECRET)
+//					.process(new TwitterPaymentProcessor())
+//					.to("direct:paymentInstructions");
 				
 				from("file://incoming?move=processed&readLock=rename")
-					.process(new Processor() {
-						@Override
-						public void process(Exchange exchange) throws Exception {
-							
-						}
-					});
+					.process(new FilePaymentProcessor())
+					.split(body(List.class))
+					.to("direct:paymentInstructions");
+				
+				from("direct:paymentInstructions")
+					.process(new PaymentInstructionProcessor());
 			}
 		});
 		
