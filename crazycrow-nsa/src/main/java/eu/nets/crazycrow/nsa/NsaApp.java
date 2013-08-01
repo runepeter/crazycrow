@@ -22,15 +22,15 @@ public class NsaApp {
 		camelContext.addRoutes(new RouteBuilder() {
 			@Override
 			public void configure() throws Exception {
-//				from("twitter://search?type=polling" +
-//						"&keywords=javazone" +
-//						"&delay=60" +
-//						"&consumerKey=" + CONSUMER_KEY + 
-//						"&consumerSecret=" + CONSUMER_SECRET + 
-//						"&accessToken=" + ACCESS_TOKEN + 
-//						"&accessTokenSecret=" + ACCESS_TOKEN_SECRET)
-//					.process(new TwitterPaymentProcessor())
-//					.to("direct:paymentInstructions");
+				from("twitter://search?type=polling" +
+						"&keywords=javazone" +
+						"&delay=60" +
+						"&consumerKey=" + CONSUMER_KEY + 
+						"&consumerSecret=" + CONSUMER_SECRET + 
+						"&accessToken=" + ACCESS_TOKEN + 
+						"&accessTokenSecret=" + ACCESS_TOKEN_SECRET)
+					.process(new TwitterPaymentProcessor())
+					.to("direct:paymentInstructions");
 				
 				from("file://incoming?move=processed&readLock=rename")
 					.process(new FilePaymentProcessor())
