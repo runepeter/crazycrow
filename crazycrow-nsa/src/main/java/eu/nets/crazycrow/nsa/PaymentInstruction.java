@@ -17,7 +17,7 @@ public class PaymentInstruction {
 
 	@Override
 	public String toString() {
-		return String.format("%s -- %s NOK -> %s.", debitSocialId, amount, creditSocialId);
+		return String.format("%s -> %s :: %s NOK", debitSocialId, creditSocialId, amount);
 	}
 	
 	public Long getId() {

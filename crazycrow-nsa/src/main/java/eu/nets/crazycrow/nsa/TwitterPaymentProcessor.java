@@ -27,7 +27,7 @@ final public class TwitterPaymentProcessor implements Processor {
 	public static PaymentInstruction toPaymentInstruction(Status status) {
 		PaymentInstruction paymentInstruction = new PaymentInstruction();
 		paymentInstruction.setSource(Source.Twitter);
-		paymentInstruction.setDebitSocialId(status.getUser().getName());
+		paymentInstruction.setDebitSocialId("@" + status.getUser().getScreenName());
 		
 		String text = status.getText();
 

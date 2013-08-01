@@ -19,7 +19,7 @@ public class TwitterPaymentProcessorTest {
 	
 	@Test
 	public void shouldAcceptFormat1() throws Exception {
-		PaymentInstruction paymentInstruction = toPaymentInstruction(status("@runepeter", "@steingrd Her får du 100 kroner"));
+		PaymentInstruction paymentInstruction = toPaymentInstruction(status("runepeter", "@steingrd Her får du 100 kroner"));
 		
 		assertThat(paymentInstruction.getSource()).isEqualTo(Source.Twitter);
 		assertThat(paymentInstruction.getDebitSocialId()).isEqualTo("@runepeter");
@@ -29,7 +29,7 @@ public class TwitterPaymentProcessorTest {
 	
 	@Test
 	public void shouldAcceptFormat2() throws Exception {
-		PaymentInstruction paymentInstruction = toPaymentInstruction(status("@runepeter", "@steingrd Jeg sender deg 100 spenn"));
+		PaymentInstruction paymentInstruction = toPaymentInstruction(status("runepeter", "@steingrd Jeg sender deg 100 spenn"));
 		
 		assertThat(paymentInstruction.getSource()).isEqualTo(Source.Twitter);
 		assertThat(paymentInstruction.getDebitSocialId()).isEqualTo("@runepeter");
@@ -39,7 +39,7 @@ public class TwitterPaymentProcessorTest {
 
 	private Status status(String sender, String text) {
 		User user = mock(User.class);
-		when(user.getName()).thenReturn(sender);
+		when(user.getScreenName()).thenReturn(sender);
 		
 		Status status = mock(Status.class);
 		when(status.getText()).thenReturn(text);
