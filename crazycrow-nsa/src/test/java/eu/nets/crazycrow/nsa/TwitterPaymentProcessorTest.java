@@ -26,6 +26,16 @@ public class TwitterPaymentProcessorTest {
 		assertThat(paymentInstruction.getCreditSocialId()).isEqualTo("@steingrd");
 		assertThat(paymentInstruction.getAmount()).isEqualTo(new BigDecimal("100"));
 	}
+	
+	@Test
+	public void shouldAcceptFormat2() throws Exception {
+		PaymentInstruction paymentInstruction = toPaymentInstruction(status("@runepeter", "@steingrd Jeg sender deg 100 spenn"));
+		
+		assertThat(paymentInstruction.getSource()).isEqualTo(Source.Twitter);
+		assertThat(paymentInstruction.getDebitSocialId()).isEqualTo("@runepeter");
+		assertThat(paymentInstruction.getCreditSocialId()).isEqualTo("@steingrd");
+		assertThat(paymentInstruction.getAmount()).isEqualTo(new BigDecimal("100"));
+	}
 
 	private Status status(String sender, String text) {
 		User user = mock(User.class);
