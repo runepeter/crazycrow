@@ -1,4 +1,11 @@
 angular.module('AppResources', ['ngResource'])
-        .factory('Crows', function ($resource) {
-            return $resource("http://localhost\\:9090/api/crows/:name", {}, {});
+        .factory('Crows', function () {
+
+            var jolokia = new Jolokia({url: "/jmx"});
+
+            return {
+                'query': function() {
+                    return jolokia.search("*:*");
+                }
+            }
         });

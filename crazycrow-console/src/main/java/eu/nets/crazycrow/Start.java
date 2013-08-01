@@ -9,6 +9,7 @@ import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
+import org.jolokia.http.AgentServlet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
@@ -75,8 +76,12 @@ public class Start {
         resourceServlet.setInitParameter("dirAllowed", "true");
         resourceServlet.setInitParameter("resourceBase", resourceBase);
         resourceServlet.setInitParameter("pathInfoOnly", "true");
+
+        ServletHolder jmxServlet = new ServletHolder(AgentServlet.class);
+
         contextHandler.getHandler().addServlet(resourceServlet, "/*");
         contextHandler.getHandler().addServlet(jerseyServlet, "/api/*");
+        contextHandler.getHandler().addServlet(jmxServlet, "/jmx/*");
 
         // let's fire this thing up now...
         if (onServer) {
