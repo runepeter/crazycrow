@@ -6,6 +6,7 @@ import org.apache.camel.spring.SpringRouteBuilder;
 import org.springframework.stereotype.Component;
 
 import eu.nets.crazycrow.nsa.FilePaymentProcessor;
+import eu.nets.crazycrow.nsa.PaymentInstruction;
 import eu.nets.crazycrow.nsa.PaymentInstructionProcessor;
 import eu.nets.crazycrow.nsa.TwitterPaymentProcessor;
 
@@ -27,6 +28,7 @@ public class NsaRouteBuilder extends SpringRouteBuilder {
                 "&accessToken=" + ACCESS_TOKEN +
                 "&accessTokenSecret=" + ACCESS_TOKEN_SECRET)
                 .beanRef("twitterPaymentProcessor")
+                .filter(body(PaymentInstruction.class).isNotNull())
                 .to("direct:paymentInstructions");
 
         from("file://incoming?move=processed&readLock=rename")

@@ -40,6 +40,8 @@ final public class TwitterPaymentProcessor implements Processor {
 		} else if (matcher2.matches()) {
 			paymentInstruction.setCreditSocialId(matcher2.group(1));
 			paymentInstruction.setAmount(new BigDecimal(matcher2.group(2)));
+		} else {
+			paymentInstruction = null;
 		}
 		
 		return paymentInstruction;
