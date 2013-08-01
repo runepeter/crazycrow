@@ -24,7 +24,7 @@ public class TwitterPaymentProcessorTest {
 		assertThat(paymentInstruction.getSource()).isEqualTo(Source.Twitter);
 		assertThat(paymentInstruction.getDebitSocialId()).isEqualTo("@runepeter");
 		assertThat(paymentInstruction.getCreditSocialId()).isEqualTo("@steingrd");
-		assertThat(paymentInstruction.getAmount()).isEqualTo(new BigDecimal("100.00"));
+		assertThat(paymentInstruction.getAmount()).isEqualTo(new BigDecimal("100"));
 	}
 
 	private Status status(String sender, String text) {

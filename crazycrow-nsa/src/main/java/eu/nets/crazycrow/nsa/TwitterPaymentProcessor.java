@@ -1,5 +1,6 @@
 package eu.nets.crazycrow.nsa;
 
+import java.math.BigDecimal;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -27,15 +28,13 @@ final public class TwitterPaymentProcessor implements Processor {
 		
 		String text = status.getText();
 
-		Pattern pattern = Pattern.compile("^[@](\\s+) Her får du (\\d+) kroner.*$");
+		Pattern pattern = Pattern.compile("^(@\\S+) Her får du (\\d+) kroner.*$");
 		Matcher matcher = pattern.matcher(text);
 		
 		if (matcher.matches()) {
-			String receiver = matcher.group(1);
-			String amount = matcher.group(2);
-		} else {
-			throw new IllegalArgumentException("Could not parse text: " + text);
-		}
+			paymentInstruction.setCreditSocialId(matcher.group(1));
+			paymentInstruction.setAmount(new BigDecimal(matcher.group(2)));
+		} 
 		
 		return paymentInstruction;
 	}
