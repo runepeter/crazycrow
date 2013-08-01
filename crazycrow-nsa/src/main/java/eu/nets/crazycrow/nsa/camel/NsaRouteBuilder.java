@@ -20,7 +20,7 @@ public class NsaRouteBuilder extends SpringRouteBuilder {
     @Override
     public void configure() throws Exception {
         from("twitter://search?type=polling" +
-                "&keywords=javazone" +
+                "&keywords=nsa2" +
                 "&delay=60" +
                 "&consumerKey=" + CONSUMER_KEY +
                 "&consumerSecret=" + CONSUMER_SECRET +

@@ -17,7 +17,7 @@ public class PaymentInstruction {
 
 	@Override
 	public String toString() {
-		return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+		return String.format("%s -- %s NOK -> %s.", debitSocialId, amount, creditSocialId);
 	}
 	
 	public Long getId() {
