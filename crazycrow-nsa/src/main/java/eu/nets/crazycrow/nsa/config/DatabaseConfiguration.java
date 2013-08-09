@@ -13,16 +13,20 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBuilder;
 
+import eu.nets.crazycrow.jdbc.CrazyCrowDataSource;
+
 @Configuration
 public class DatabaseConfiguration {
 
     @Bean
     public DataSource dataSource() {
+
         JdbcDataSource ds = new JdbcDataSource();
         ds.setURL("jdbc:h2:target/db");
         ds.setUser("sa");
         ds.setPassword("sa");
-        return ds;
+
+        return new CrazyCrowDataSource(ds);
     }
 
     @Bean

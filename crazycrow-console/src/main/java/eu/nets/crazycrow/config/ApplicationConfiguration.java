@@ -8,4 +8,5 @@ import org.springframework.context.annotation.Configuration;
         "eu.nets.crazycrow.rest"
 })
 public class ApplicationConfiguration {
+
 }

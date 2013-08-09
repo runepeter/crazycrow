@@ -8,7 +8,7 @@ import java.util.logging.Logger;
 
 import javax.sql.DataSource;
 
-public class CrazyCrowDataSource implements DataSource {
+public class CrazyCrowDataSource implements DataSource, CrazyCrowDataSourceMBean {
 
     private final DataSource delegate;
 
@@ -66,5 +66,20 @@ public class CrazyCrowDataSource implements DataSource {
         return "CrazyCrowDataSource@" + hashCode() + "{" +
                 "delegate=" + delegate +
                 '}';
+    }
+
+    @Override
+    public String getDomain() {
+        return "eu.nets.crazycrow";
+    }
+
+    @Override
+    public String getName() {
+        return "DataSource";
+    }
+
+    @Override
+    public String getType() {
+        return CrazyCrowDataSource.class.getSimpleName();
     }
 }

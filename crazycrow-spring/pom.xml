@@ -10,15 +10,28 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>crazycrow-jdbc</artifactId>
+    <artifactId>crazycrow-spring</artifactId>
     <packaging>jar</packaging>
 
-    <name>Crazy Crow :: JDBC</name>
+    <name>Crazy Crow :: Spring</name>
+
+    <properties>
+        <spring.version>3.2.2.RELEASE</spring.version>
+    </properties>
 
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>crazycrow-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
         </dependency>
     </dependencies>
 

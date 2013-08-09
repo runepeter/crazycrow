@@ -18,15 +18,18 @@
 	<properties>
 		<spring.version>3.2.3.RELEASE</spring.version>
         <hibernate.version>4.2.0.Final</hibernate.version>
+        <jolokia.version>1.1.3</jolokia.version>
         <camel.version>2.11.1</camel.version>
 		<slf4j.version>1.7.5</slf4j.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
 	<modules>
+		<module>crazycrow-core</module>
 		<module>crazycrow-jdbc</module>
 		<module>crazycrow-console</module>
 		<module>crazycrow-nsa</module>
+		<module>crazycrow-spring</module>
 	</modules>
 
 	<scm>
@@ -36,6 +39,24 @@
 
 	<dependencyManagement>
 		<dependencies>
+
+            <!-- Project dependencies: -->
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>crazycrow-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>crazycrow-spring</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>crazycrow-jdbc</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
 			<dependency>
 				<groupId>commons-lang</groupId>
 				<artifactId>commons-lang</artifactId>
