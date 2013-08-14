@@ -2,12 +2,24 @@ package eu.nets.crazycrow.nsa;
 
 import java.math.BigDecimal;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
+import static javax.persistence.GenerationType.SEQUENCE;
+
+@Entity
 public class PaymentInstruction {
 
+    @Id
+    @GeneratedValue(strategy = SEQUENCE, generator = "instr_seq")
+    @SequenceGenerator(name = "instr_seq", sequenceName = "instr_seq", allocationSize = 1)
 	private Long id;
+
 	private Source source;
 	private BigDecimal amount;
 	private String debitSocialId;

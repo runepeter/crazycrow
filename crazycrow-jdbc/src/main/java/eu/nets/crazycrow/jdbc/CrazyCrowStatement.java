@@ -6,22 +6,45 @@ import java.sql.SQLException;
 import java.sql.SQLWarning;
 import java.sql.Statement;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class CrazyCrowStatement implements Statement {
 
-    private final Statement delegate;
+    private final Logger logger = LoggerFactory.getLogger(CrazyCrowStatement.class);
 
-    public CrazyCrowStatement(final Statement delegate) {
+    private final Statement delegate;
+    private final CrazyCrowConnection connection;
+
+    public CrazyCrowStatement(final Statement delegate, final CrazyCrowConnection connection) {
         this.delegate = delegate;
+        this.connection = connection;
+    }
+
+    CrazyCrowDataSource getDataSource() {
+        return connection.getDataSource();
     }
 
     @Override
     public ResultSet executeQuery(final String sql) throws SQLException {
-        return delegate.executeQuery(sql);
+        return new CrazyCrowResultSet(delegate.executeQuery(sql), this);
     }
 
     @Override
     public int executeUpdate(final String sql) throws SQLException {
-        return delegate.executeUpdate(sql);
+
+        int count = delegate.executeUpdate(sql);
+
+        if (getDataSource().isEnabled() && getDataSource().getUpdateDelayMs() > 0) {
+            try {
+                logger.info("Delaying database update... [{}]", sql);
+                Thread.sleep(getDataSource().getUpdateDelayMs());
+            } catch (InterruptedException e) {
+                logger.info("Unable to delay update.", e);
+            }
+        }
+
+        return count;
     }
 
     @Override
@@ -91,7 +114,7 @@ public class CrazyCrowStatement implements Statement {
 
     @Override
     public ResultSet getResultSet() throws SQLException {
-        return delegate.getResultSet();
+        return new CrazyCrowResultSet(delegate.getResultSet(), this);
     }
 
     @Override
@@ -146,12 +169,21 @@ public class CrazyCrowStatement implements Statement {
 
     @Override
     public int[] executeBatch() throws SQLException {
+
+        if (getDataSource().isEnabled() && getDataSource().getUpdateDelayMs() > 0) {
+            try {
+                Thread.sleep(getDataSource().getUpdateDelayMs());
+            } catch (InterruptedException e) {
+                logger.error("Unable to delay batch update.", e);
+            }
+        }
+
         return delegate.executeBatch();
     }
 
     @Override
     public Connection getConnection() throws SQLException {
-        return delegate.getConnection();
+        return connection;
     }
 
     @Override
@@ -161,7 +193,7 @@ public class CrazyCrowStatement implements Statement {
 
     @Override
     public ResultSet getGeneratedKeys() throws SQLException {
-        return delegate.getGeneratedKeys();
+        return new CrazyCrowResultSet(delegate.getGeneratedKeys(), this);
     }
 
     @Override
@@ -232,6 +264,34 @@ public class CrazyCrowStatement implements Statement {
     @Override
     public boolean isWrapperFor(final Class<?> iface) throws SQLException {
         return delegate.isWrapperFor(iface);
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        final CrazyCrowStatement that = (CrazyCrowStatement) o;
+
+        if (!connection.equals(that.connection)) {
+            return false;
+        }
+        if (!delegate.equals(that.delegate)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = delegate.hashCode();
+        result = 31 * result + connection.hashCode();
+        return result;
     }
 
     @Override

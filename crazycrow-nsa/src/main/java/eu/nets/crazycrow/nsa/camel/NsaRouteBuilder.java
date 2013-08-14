@@ -2,6 +2,8 @@ package eu.nets.crazycrow.nsa.camel;
 
 import java.util.List;
 
+import org.apache.camel.Exchange;
+import org.apache.camel.Processor;
 import org.apache.camel.spring.SpringRouteBuilder;
 import org.springframework.stereotype.Component;
 
@@ -23,20 +25,34 @@ public class NsaRouteBuilder extends SpringRouteBuilder {
         from("twitter://search?type=polling" +
                 "&keywords=nsa2" +
                 "&delay=60" +
+                "&count=200" +
                 "&consumerKey=" + CONSUMER_KEY +
                 "&consumerSecret=" + CONSUMER_SECRET +
                 "&accessToken=" + ACCESS_TOKEN +
                 "&accessTokenSecret=" + ACCESS_TOKEN_SECRET)
+                .autoStartup(false)
                 .beanRef("twitterPaymentProcessor")
                 .filter(body(PaymentInstruction.class).isNotNull())
-                .to("direct:paymentInstructions");
+                .to("seda:paymentInstructions");
 
         from("file://incoming?move=processed&readLock=rename")
                 .beanRef("filePaymentProcessor")
                 .split(body(List.class))
-                .to("direct:paymentInstructions");
+                .to("seda:paymentInstructions");
 
-        from("direct:paymentInstructions")
-                .beanRef("paymentInstructionProcessor");
+        from("seda:paymentInstructions?concurrentConsumers=10")
+                .transacted()
+                .beanRef("paymentInstructionProcessor")
+                .onException(Throwable.class)
+                .process(new Processor() {
+                    @Override
+                    public void process(final Exchange exchange) throws Exception {
+                        System.err.println("ERROR: " + exchange.getIn().getBody());
+                    }
+                });
+
+        from("timer://foo?fixedRate=true&period=5s")
+                .transacted()
+                .beanRef("paymentLoggerService", "doIt");
     }
 }

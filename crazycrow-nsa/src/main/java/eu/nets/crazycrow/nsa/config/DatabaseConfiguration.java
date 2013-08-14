@@ -1,9 +1,12 @@
 package eu.nets.crazycrow.nsa.config;
 
 import java.util.Properties;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import javax.sql.DataSource;
 
+import org.h2.jdbcx.JdbcConnectionPool;
 import org.h2.jdbcx.JdbcDataSource;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.ImprovedNamingStrategy;
@@ -26,7 +29,19 @@ public class DatabaseConfiguration {
         ds.setUser("sa");
         ds.setPassword("sa");
 
-        return new CrazyCrowDataSource(ds);
+        final JdbcConnectionPool pool = JdbcConnectionPool.create("jdbc:h2:target/db", "sa", "sa");
+        pool.setMaxConnections(3);
+        pool.setLoginTimeout(5);
+
+        Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(new Runnable() {
+            @Override
+            public void run() {
+                int activeConnections = pool.getActiveConnections();
+                System.err.println("active connections #: " + activeConnections);
+            }
+        }, 5, 5, TimeUnit.SECONDS);
+
+        return new CrazyCrowDataSource(pool);
     }
 
     @Bean
@@ -38,7 +53,7 @@ public class DatabaseConfiguration {
     public SessionFactory sessionFactory() {
 
         final String[] packages = {
-                "eu.nets.crazycrow.nsa.domain",
+                "eu.nets.crazycrow.nsa",
         };
 
         LocalSessionFactoryBuilder builder = new LocalSessionFactoryBuilder(dataSource());
@@ -54,6 +69,7 @@ public class DatabaseConfiguration {
         final HibernateTransactionManager transactionManager = new HibernateTransactionManager();
         transactionManager.setSessionFactory(sessionFactory());
         transactionManager.setDataSource(dataSource());
+        transactionManager.setDefaultTimeout(5);
         return transactionManager;
     }
 
