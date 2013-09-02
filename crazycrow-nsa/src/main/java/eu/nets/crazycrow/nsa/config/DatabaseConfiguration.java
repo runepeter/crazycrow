@@ -31,7 +31,7 @@ public class DatabaseConfiguration {
 
         final JdbcConnectionPool pool = JdbcConnectionPool.create("jdbc:h2:target/db", "sa", "sa");
         pool.setMaxConnections(3);
-        pool.setLoginTimeout(5);
+        pool.setLoginTimeout(60);
 
         Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(new Runnable() {
             @Override

@@ -27,6 +27,7 @@
 	<modules>
 		<module>crazycrow-core</module>
 		<module>crazycrow-jdbc</module>
+		<module>crazycrow-os</module>
 		<module>crazycrow-console</module>
 		<module>crazycrow-nsa</module>
 		<module>crazycrow-spring</module>
@@ -54,6 +55,11 @@
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>crazycrow-jdbc</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>crazycrow-os</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
