@@ -11,6 +11,8 @@ import org.h2.jdbcx.JdbcDataSource;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.ImprovedNamingStrategy;
 import org.hibernate.cfg.NamingStrategy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.orm.hibernate4.HibernateTransactionManager;
@@ -20,6 +22,8 @@ import eu.nets.crazycrow.jdbc.CrazyCrowDataSource;
 
 @Configuration
 public class DatabaseConfiguration {
+
+    private final Logger logger = LoggerFactory.getLogger(DatabaseConfiguration.class);
 
     @Bean
     public DataSource dataSource() {
@@ -37,7 +41,7 @@ public class DatabaseConfiguration {
             @Override
             public void run() {
                 int activeConnections = pool.getActiveConnections();
-                System.err.println("active connections #: " + activeConnections);
+                logger.info("active connections #: " + activeConnections);
             }
         }, 5, 5, TimeUnit.SECONDS);
 

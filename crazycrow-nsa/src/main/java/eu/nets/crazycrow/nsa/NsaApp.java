@@ -10,8 +10,8 @@ public class NsaApp {
 
     public static void main(String[] args) throws Exception {
 
-        System.setProperty("http.proxyHost", "wpad");
-        System.setProperty("http.proxyPort", "8080");
+        /*System.setProperty("http.proxyHost", "wpad");
+        System.setProperty("http.proxyPort", "8080");*/
 
         new AnnotationConfigApplicationContext(ApplicationConfiguration.class);
 
