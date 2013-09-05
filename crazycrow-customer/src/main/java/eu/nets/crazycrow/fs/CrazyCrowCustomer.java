@@ -4,8 +4,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.util.Random;
 
 import com.google.common.io.CharStreams;
 import com.google.common.io.Files;
@@ -20,15 +23,57 @@ public class CrazyCrowCustomer implements CrazyCrowCustomerMBean {
 	private String incomingDirectory = "crazycrow-incoming";
 	private String destinationDirectory = "incoming";
     
+    @Override
+    public void send() {
+    	for (File originalFile : new File(incomingDirectory).listFiles()) {
+			File finalDestination = new File(new File(destinationDirectory), originalFile.getName());
+
+			try {
+				Files.move(originalFile, finalDestination);
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}			
+		}
+    }
+    
 	@Override
-	public void changeEncodingAndMove() {
-		for (File file : new File(incomingDirectory).listFiles()) {
+	public void cutFile() {
+		for (File originalFile : new File(incomingDirectory).listFiles()) {
 			
-			File tempFile = new File(file.getAbsolutePath() + "_cc_tmp");
-			File finalDestination = new File(new File(destinationDirectory), file.getName());
+			int cutOff = new Random(System.currentTimeMillis()).nextInt((int)originalFile.length());
+			File tempFile = new File(originalFile.getAbsolutePath() + "_cc_tmp");
 			
 			try {
-				InputStreamReader reader = new InputStreamReader(new FileInputStream(file), inputEncoding);
+				InputStream inputStream = new  FileInputStream(originalFile);
+				OutputStream outputStream = new FileOutputStream(tempFile);			
+			
+				for (int i = 0; i < cutOff; i++) {
+					outputStream.write(inputStream.read());
+				}
+				
+				inputStream.close();
+				outputStream.flush();
+				outputStream.close();
+				
+				originalFile.delete();
+				Files.move(tempFile, originalFile);
+				
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}			
+			
+			
+		}
+	}
+	
+	@Override
+	public void changeEncoding() {
+		for (File originalFile : new File(incomingDirectory).listFiles()) {
+			
+			File tempFile = new File(originalFile.getAbsolutePath() + "_cc_tmp");
+			
+			try {
+				InputStreamReader reader = new InputStreamReader(new FileInputStream(originalFile), inputEncoding);
 				OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(tempFile));			
 			
 				CharStreams.copy(reader, writer);
@@ -37,8 +82,8 @@ public class CrazyCrowCustomer implements CrazyCrowCustomerMBean {
 				writer.flush();
 				writer.close();
 
-				file.delete();
-				Files.move(tempFile, finalDestination);
+				originalFile.delete();
+				Files.move(tempFile, originalFile);
 				
 			} catch (IOException e) {
 				throw new RuntimeException(e);

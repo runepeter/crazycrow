@@ -20,6 +20,10 @@ public interface CrazyCrowCustomerMBean extends Crow {
 	
     void setInputEncoding(String encoding);
 
-    void changeEncodingAndMove();
+    void send();
+    
+    void changeEncoding();
+    
+    void cutFile();
     
 }
