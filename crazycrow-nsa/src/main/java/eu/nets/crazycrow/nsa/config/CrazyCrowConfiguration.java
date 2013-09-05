@@ -1,15 +1,16 @@
 package eu.nets.crazycrow.nsa.config;
 
-import eu.nets.crazycrow.fs.CrazyCrowFs;
+import java.io.File;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jmx.support.MBeanServerFactoryBean;
 
+import eu.nets.crazycrow.fs.CrazyCrowCustomer;
+import eu.nets.crazycrow.fs.CrazyCrowFs;
 import eu.nets.crazycrow.os.CrazyCrowOs;
 import eu.nets.crazycrow.spring.CrowRegistrationPostProcessorAdapter;
-
-import java.io.File;
 
 @Configuration
 public class CrazyCrowConfiguration {
@@ -26,6 +27,11 @@ public class CrazyCrowConfiguration {
         return new CrowRegistrationPostProcessorAdapter();
     }
 
+    @Bean
+    public CrazyCrowCustomer crazyCrowCustomerChangeEncoding() {
+    	return new CrazyCrowCustomer();
+    }
+    
     @Bean
     public CrazyCrowOs crazyCrowOs() {
         return new CrazyCrowOs();

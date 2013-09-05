@@ -32,6 +32,7 @@
 		<!--module>crazycrow-console</module-->
 		<module>crazycrow-nsa</module>
 		<module>crazycrow-spring</module>
+		<module>crazycrow-customer</module>
 	</modules>
 
 	<scm>
@@ -66,6 +67,11 @@
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>crazycrow-fs</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>crazycrow-customer</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
