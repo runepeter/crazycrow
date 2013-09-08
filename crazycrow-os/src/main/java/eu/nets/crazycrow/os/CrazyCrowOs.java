@@ -1,5 +1,6 @@
 package eu.nets.crazycrow.os;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -51,7 +52,14 @@ public class CrazyCrowOs implements CrazyCrowOsMBean {
         this.status = Status.DISABLED;
         return true;
     }
-
+    
+    @Override
+    public void maxOpenFiles(int pid, int softLimit, int hardLimit) throws Exception {
+    	String command = String.format("crow %d %d %d", pid, softLimit, hardLimit);
+    	
+    	Process process = Runtime.getRuntime().exec(command);
+    }
+    
     @Override
     public void fillHeap(final long freeMemoryAfterFill) {
 

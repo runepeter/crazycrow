@@ -8,4 +8,5 @@ public interface CrazyCrowOsMBean extends Crow {
 
     void clearFill();
 
+    void maxOpenFiles(int pid, int softLimit, int hardLimit) throws Exception;
 }
