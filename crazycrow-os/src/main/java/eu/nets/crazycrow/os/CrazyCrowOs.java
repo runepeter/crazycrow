@@ -16,6 +16,18 @@ public class CrazyCrowOs implements CrazyCrowOsMBean {
 
     private List<byte[]> fill = new ArrayList<byte[]>();
 
+	private String linuxCrowPath = "crow"
+
+    @Override
+    public String getLinuxCrowPath() {
+    	return linuxCrowPath;
+    }
+    
+    @Override
+    public void setLinuxCrowPath(String path) {
+		this.linuxCrowPath = path;
+    }
+    
     @Override
     public String getDomain() {
         return "eu.nets.crazycrow";
@@ -55,7 +67,7 @@ public class CrazyCrowOs implements CrazyCrowOsMBean {
     
     @Override
     public void maxOpenFiles(int pid, int softLimit, int hardLimit) throws Exception {
-    	String command = String.format("crow %d %d %d", pid, softLimit, hardLimit);
+    	String command = String.format("%s %d %d %d", linuxCrowPath, pid, softLimit, hardLimit);
     	
     	Process process = Runtime.getRuntime().exec(command);
     }
