@@ -16,7 +16,7 @@ public class CrazyCrowOs implements CrazyCrowOsMBean {
 
     private List<byte[]> fill = new ArrayList<byte[]>();
 
-	private String linuxCrowPath = "crow";
+	private String linuxCrowPath = "/crow";
 
     @Override
     public String getLinuxCrowPath() {
