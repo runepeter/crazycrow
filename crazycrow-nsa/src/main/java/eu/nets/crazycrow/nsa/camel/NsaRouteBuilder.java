@@ -43,13 +43,8 @@ public class NsaRouteBuilder extends SpringRouteBuilder {
         from("seda:paymentInstructions?concurrentConsumers=10")
                 .transacted()
                 .beanRef("paymentInstructionProcessor")
-                .onException(Throwable.class)
-                .process(new Processor() {
-                    @Override
-                    public void process(final Exchange exchange) throws Exception {
-                        System.err.println("ERROR: " + exchange.getIn().getBody());
-                    }
-                });
+                .transform(simple("${body.debitSocialId}"))
+                .to("file://ngpp");
 
         from("timer://foo?fixedRate=true&period=5s")
                 .transacted()

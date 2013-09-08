@@ -1,5 +1,7 @@
 package eu.nets.crazycrow.nsa;
 
+import java.math.BigDecimal;
+
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.hibernate.Session;
@@ -24,14 +26,41 @@ public class PaymentInstructionProcessor implements Processor {
     }
 
     @Override
-    public void process(Exchange exchange) throws Exception {
+    public void process(final Exchange exchange) throws Exception {
 
         PaymentInstruction paymentInstruction = exchange.getIn().getBody(PaymentInstruction.class);
 
         Session session = sessionFactory.getCurrentSession();
         session.save(paymentInstruction);
         session.flush();
-        logger.info(session.getTransaction() + " :: Received [{}].", paymentInstruction);
+
+        String debitId = paymentInstruction.getDebitSocialId();
+        String debitAccount = paymentInstruction.getDebitAccount();
+
+        String creditId = paymentInstruction.getCreditSocialId();
+        String creditAccount = paymentInstruction.getCreditAccount();
+
+        BigDecimal amount = paymentInstruction.getAmount();
+
+        Source paymentSource = paymentInstruction.getSource();
+        Long paymentId = paymentInstruction.getId();
+
+        StringBuffer buffer = new StringBuffer("Received instruction to transfer ");
+        buffer.append(amount).append(" NOK from ");
+        buffer.append(debitId);
+
+        if (debitAccount != null) {
+            buffer.append(" (").append(debitAccount).append(")");
+        }
+
+        buffer.append(" to ").append(creditId);
+
+        if (creditAccount != null) {
+            buffer.append(" (").append(creditAccount).append(").");
+        }
+
+        buffer.append(" [").append(paymentSource).append("/").append(paymentId).append("]");
+        logger.info(buffer.toString());
     }
 
 }

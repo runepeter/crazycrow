@@ -8,3 +8,6 @@ target/
 .settings
 5MB.fs
 crazycrow-nsa/logs
+logs/
+ngpp/
+
