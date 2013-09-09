@@ -71,8 +71,11 @@ public class CrazyCrowFs implements CrazyCrowFsMBean {
 
             final FileStore store = Files.getFileStore(dir.toPath());
             long free = store.getUnallocatedSpace();
+            logger.info("Free space before filling {}.", free);
 
             long toFill = free - spaceAfterFill;
+            logger.info("Space to fill {}.", toFill);
+
             if (toFill > 0) {
 
                 long blocks = toFill / 1024;
