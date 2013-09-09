@@ -1,13 +1,19 @@
 package eu.nets.crazycrow.fs;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.nio.charset.Charset;
+import java.util.List;
 import java.util.Random;
 
 import com.google.common.io.CharStreams;
@@ -67,6 +73,54 @@ public class CrazyCrowCustomer implements CrazyCrowCustomerMBean {
 	}
 	
 	@Override
+	public void changeEncodingSomeLines() {
+		for (File originalFile : new File(incomingDirectory).listFiles()) {
+			
+			int numberOfLines;
+			
+			try {
+				List<String> lines = Files.readLines(originalFile, Charset.forName(this.inputEncoding));
+				numberOfLines = lines.size();
+			} catch (IOException e1) {
+				throw new RuntimeException(e1);
+			}
+			
+			int changeLineNumber = new Random(System.currentTimeMillis()).nextInt(numberOfLines);
+			int lineCounter = 0;
+			
+			File tempFile = new File(originalFile.getAbsolutePath() + "_cc_tmp");
+			
+			try {
+				BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(originalFile), inputEncoding));
+				OutputStream outputStream = new FileOutputStream(tempFile);
+				
+				String line = null;
+				while ((line = reader.readLine()) != null) {
+					line += "\n";
+					if (lineCounter == changeLineNumber) {
+						outputStream.write(line.getBytes(outputEncoding));
+					} else {
+						outputStream.write(line.getBytes(inputEncoding));
+					}
+					
+					lineCounter++;
+				}
+				
+				reader.close();
+				outputStream.flush();
+				outputStream.close();
+				
+				originalFile.delete();
+				Files.move(tempFile, originalFile);
+				
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+			
+		}
+	}
+	
+	@Override
 	public void changeEncoding() {
 		for (File originalFile : new File(incomingDirectory).listFiles()) {
 			
@@ -74,7 +128,7 @@ public class CrazyCrowCustomer implements CrazyCrowCustomerMBean {
 			
 			try {
 				InputStreamReader reader = new InputStreamReader(new FileInputStream(originalFile), inputEncoding);
-				OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(tempFile));			
+				OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(tempFile), outputEncoding);			
 			
 				CharStreams.copy(reader, writer);
 				

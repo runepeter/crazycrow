@@ -24,6 +24,8 @@ public interface CrazyCrowCustomerMBean extends Crow {
     
     void changeEncoding();
     
+    void changeEncodingSomeLines();
+    
     void cutFile();
     
 }
