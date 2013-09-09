@@ -2,6 +2,7 @@ package eu.nets.crazycrow.nsa;
 
 import static eu.nets.crazycrow.nsa.TwitterPaymentProcessor.toPaymentInstruction;
 import static org.fest.assertions.Assertions.assertThat;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -16,6 +17,46 @@ public class TwitterPaymentProcessorTest {
 
 	// 1 - @fra: @til ... Her får du 100 kroner ...
 	// 2 - @fra: @til ... Jeg sender deg 100 spenn ...
+	
+	@Test
+	public void shouldAcceptFreeFormatWithKroner() throws Exception {
+		PaymentInstruction paymentInstruction = toPaymentInstruction(status("runepeter", "@steingrd Aiabaia 100 kroner tralala"));
+		
+		assertThat(paymentInstruction.getSource()).isEqualTo(Source.Twitter);
+		assertThat(paymentInstruction.getDebitSocialId()).isEqualTo("@runepeter");
+		assertThat(paymentInstruction.getCreditSocialId()).isEqualTo("@steingrd");
+		assertThat(paymentInstruction.getAmount()).isEqualTo(new BigDecimal("100"));
+	}
+	
+	@Test
+	public void shouldAcceptFreeFormatWithoutSpace() throws Exception {
+		PaymentInstruction paymentInstruction = toPaymentInstruction(status("runepeter", "@steingrd Aiabaia 100kr tralala"));
+		
+		assertThat(paymentInstruction.getSource()).isEqualTo(Source.Twitter);
+		assertThat(paymentInstruction.getDebitSocialId()).isEqualTo("@runepeter");
+		assertThat(paymentInstruction.getCreditSocialId()).isEqualTo("@steingrd");
+		assertThat(paymentInstruction.getAmount()).isEqualTo(new BigDecimal("100"));
+	}
+	
+	@Test
+	public void shouldAcceptFreeFormatWithKr() throws Exception {
+		PaymentInstruction paymentInstruction = toPaymentInstruction(status("runepeter", "@steingrd Aiabaia 100 kr tralala"));
+		
+		assertThat(paymentInstruction.getSource()).isEqualTo(Source.Twitter);
+		assertThat(paymentInstruction.getDebitSocialId()).isEqualTo("@runepeter");
+		assertThat(paymentInstruction.getCreditSocialId()).isEqualTo("@steingrd");
+		assertThat(paymentInstruction.getAmount()).isEqualTo(new BigDecimal("100"));
+	}
+	
+	@Test
+	public void shouldAcceptFreeFormatWithCommaDash() throws Exception {
+		PaymentInstruction paymentInstruction = toPaymentInstruction(status("runepeter", "@steingrd Aiabaia 100,- tralala"));
+		
+		assertThat(paymentInstruction.getSource()).isEqualTo(Source.Twitter);
+		assertThat(paymentInstruction.getDebitSocialId()).isEqualTo("@runepeter");
+		assertThat(paymentInstruction.getCreditSocialId()).isEqualTo("@steingrd");
+		assertThat(paymentInstruction.getAmount()).isEqualTo(new BigDecimal("100"));
+	}
 	
 	@Test
 	public void shouldAcceptFormat1() throws Exception {
