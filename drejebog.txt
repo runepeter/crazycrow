@@ -8,3 +8,28 @@
 	6. Send tweet fra @twinocom: @runepeter 100 spenn til en venn #nsa2
 	6. Se at logg stopper opp, prat i vei
 
+2. OS-kråking
+
+3. Databasekråking
+
+	1. Start app
+	2. Forklar litt rundt active connections og received payments
+	3. Sett updateDelayMs = 45000
+	4. Start Camel Twitter route 1
+
+4. Kundekråking
+
+	1. Start app
+	2. tail log
+	3. cp payments.txt crazycrow-incoming
+	4. changeEndodingSomeLines()
+	5. send()
+	6. se at remitteringsinformasjon blir føcked up i loggen
+
+	1. tail log
+	2. cp payments.txt crazycrow-incoming
+	3. cutFile()
+	4. send()
+	5. se stacktrace
+	6. rydd opp i incoming/
+
