@@ -13,6 +13,7 @@ import eu.nets.crazycrow.nsa.PaymentInstruction;
 
 @Component
 public class NsaRouteBuilder extends SpringRouteBuilder {
+	
 
     private final Logger logger = LoggerFactory.getLogger(NsaRouteBuilder.class);
 
@@ -53,8 +54,9 @@ public class NsaRouteBuilder extends SpringRouteBuilder {
                     @Override
                     public void process(final Exchange exchange) throws Exception {
                         String body = exchange.getIn().getBody(String.class).trim();
+                        LoggerFactory.getLogger(getClass()).info("NGPP received payment: " + body);
                         String[] parts = body.split(",");
-
+                        
                         String message = "Hei! Du har nettopp mottatt " + parts[2] + " spenn fra " + parts[0] + " på din konto. " + System.currentTimeMillis();
                         System.err.println(parts[1] + ">> " + message);
 
@@ -81,7 +83,7 @@ public class NsaRouteBuilder extends SpringRouteBuilder {
                 .handled(true)
                 .end();
 
-        from("timer://foo?fixedRate=true&period=5s")
+        from("timer://counter?fixedRate=true&period=5s")
                 .transacted()
                 .beanRef("paymentLoggerService", "doIt");
 

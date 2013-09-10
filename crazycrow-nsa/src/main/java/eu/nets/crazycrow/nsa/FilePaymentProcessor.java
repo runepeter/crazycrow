@@ -42,6 +42,7 @@ final public class FilePaymentProcessor implements Processor {
 		paymentInstruction.setDebitSocialId(split[1]);
 		paymentInstruction.setCreditSocialId(split[2]);
 		paymentInstruction.setAmount(new BigDecimal(split[3]));
+		paymentInstruction.setRemittanceInformation(split[4]);
 		return paymentInstruction;
 	}
 	

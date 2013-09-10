@@ -1,16 +1,13 @@
 package eu.nets.crazycrow.nsa;
 
+import static javax.persistence.GenerationType.SEQUENCE;
+
 import java.math.BigDecimal;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
-
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
-
-import static javax.persistence.GenerationType.SEQUENCE;
 
 @Entity
 public class PaymentInstruction {
@@ -26,6 +23,7 @@ public class PaymentInstruction {
 	private String creditSocialId;
 	private String debitAccount;
 	private String creditAccount;
+	private String remittanceInformation;
 
 	@Override
 	public String toString() {
@@ -86,6 +84,14 @@ public class PaymentInstruction {
 
 	public void setCreditAccount(String creditAccount) {
 		this.creditAccount = creditAccount;
+	}
+	
+	public String getRemittanceInformation() {
+		return remittanceInformation;
+	}
+	
+	public void setRemittanceInformation(String remittanceInformation) {
+		this.remittanceInformation = remittanceInformation;
 	}
 
 }

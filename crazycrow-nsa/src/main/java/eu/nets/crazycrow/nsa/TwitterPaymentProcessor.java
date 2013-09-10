@@ -13,7 +13,7 @@ import twitter4j.Status;
 
 final public class TwitterPaymentProcessor implements Processor {
 	
-	private static final Pattern pattern = Pattern.compile ("^(@\\S+).*?(\\d+(kroner| kroner|spenn| spenn|kr| kr|,-)).*");
+	private static final Pattern pattern = Pattern.compile ("^(@\\S+).*?(\\d+(kroner| kroner|spenn| spenn|kr| kr|,-|NOK| NOK| daler)).*");
 	
 	@Override
 	public void process(Exchange exchange) throws Exception {
@@ -25,10 +25,9 @@ final public class TwitterPaymentProcessor implements Processor {
 		PaymentInstruction paymentInstruction = new PaymentInstruction();
 		paymentInstruction.setSource(Source.Twitter);
 		paymentInstruction.setDebitSocialId("@" + status.getUser().getScreenName());
+		paymentInstruction.setRemittanceInformation(status.getText());
 		
-		String text = status.getText();
-
-		Matcher matcher = pattern.matcher(text);
+		Matcher matcher = pattern.matcher(status.getText());
 		if (matcher.matches()) {
 			paymentInstruction.setCreditSocialId(matcher.group(1));
 			paymentInstruction.setAmount(new BigDecimal(matcher.group(2).replaceAll("[^\\d]", "")));
