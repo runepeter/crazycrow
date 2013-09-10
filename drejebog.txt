@@ -2,11 +2,13 @@
 	
 	1. Slett innholdet i logs/
 	2. Starter app
-	3. tail log
-	4. Fyll disk (4096)
-	5. Start Twitter
-	6. Send tweet fra @twinocom: @runepeter 100 spenn til en venn #nsa2
-	6. Se at logg stopper opp, prat i vei
+	3. tail log, se at det kommer betalinger
+	4. Start Twitter route
+	5. Restart app
+	6. Fyll disk (300000)
+	7. Start Twitter
+	8. Send tweet fra @twinocom: @runepeter 100 spenn til en venn #nsa2
+	9. Se at logg stopper opp, prat i vei
 
 2. OS-kråking
 
@@ -14,7 +16,8 @@
 	2. Fortell litt om runtime endring av fildeskriptorer
 	3. maxOpenFiles = PID 86 100
 	4. mv os.payments incoming
-	5. se i loggen
+	5. se i loggen, der står det ingenting, men NGPP count er forskjellig fra received payments
+	6. se i konsollet, der står det en kryptisk feilmelding
 
 3. Databasekråking
 
