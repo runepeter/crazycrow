@@ -69,7 +69,7 @@ public class NsaRouteBuilder extends SpringRouteBuilder {
                         "&accessToken=" + ACCESS_TOKEN +
                         "&accessTokenSecret=" + ACCESS_TOKEN_SECRET));
 
-        from("timer://foo?fixedRate=true&period=5s")
+        from("timer://counter?fixedRate=true&period=5s")
                 .transacted()
                 .beanRef("paymentLoggerService", "doIt");
 

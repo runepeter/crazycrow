@@ -13,7 +13,7 @@ import twitter4j.Status;
 
 final public class TwitterPaymentProcessor implements Processor {
 	
-	private static final Pattern pattern = Pattern.compile ("^(@\\S+).*?(\\d+(kroner| kroner|spenn| spenn|kr| kr|,-)).*");
+	private static final Pattern pattern = Pattern.compile ("^(@\\S+).*?(\\d+(kroner| kroner|spenn| spenn|kr| kr|,-|NOK| NOK| daler)).*");
 	
 	@Override
 	public void process(Exchange exchange) throws Exception {
