@@ -2,7 +2,9 @@ package eu.nets.crazycrow.nsa;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
+import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +14,7 @@ import org.apache.camel.Processor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
 
 final public class FilePaymentProcessor implements Processor {
@@ -25,7 +28,7 @@ final public class FilePaymentProcessor implements Processor {
 		
 		List<PaymentInstruction> instructions = Lists.newArrayList();
 		
-		try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), Charsets.ISO_8859_1))) {;
 			String line = null;
 			while ((line = reader.readLine()) != null) {
 				instructions.add(toPaymentInstruction(line));
