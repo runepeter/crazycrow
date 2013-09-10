@@ -43,19 +43,20 @@ public class NsaRouteBuilder extends SpringRouteBuilder {
                 .to("seda:paymentInstructions");
 
         from("seda:paymentInstructions?concurrentConsumers=10")
+        		.tracing()
                 .transacted()
                 .beanRef("paymentInstructionProcessor")
                 .transform(simple("${body.debitSocialId},${body.creditSocialId},${body.amount}"))
-                .to("file://ngpp")
-                .onException(Throwable.class)
-                .process(new Processor() {
-					@Override
-					public void process(Exchange exchange) throws Exception {
-						logger.error("Unable to send file to NGPP [{}].", exchange.getIn().getBody());
-					}
-                })
-                .handled(true)
-                .end();
+                .to("file://ngpp");
+//                .onException(Throwable.class)
+//                .process(new Processor() {
+//					@Override
+//					public void process(Exchange exchange) throws Exception {
+//						logger.error("Unable to send file to NGPP [{}].", exchange.getIn().getBody());
+//					}
+//                })
+//                .handled(true)
+//                .end();
 
         from("file://ngpp")
                 .convertBodyTo(String.class, "utf-8")
