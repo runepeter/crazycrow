@@ -6,12 +6,15 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Expression;
 import org.apache.camel.Processor;
 import org.apache.camel.spring.SpringRouteBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import eu.nets.crazycrow.nsa.PaymentInstruction;
 
 @Component
 public class NsaRouteBuilder extends SpringRouteBuilder {
+	
 
     private static final String CONSUMER_KEY = "WK2V6RLPZDWifZLs9PTPIQ"; //"yyrw6UYUIZM1VaQW1h5u0w";
     private static final String CONSUMER_SECRET = "UCNed922hA7FPL7Ob77f2p5BsTHloWRr7hXcpaQ0ts"; //"a8Ep2ioqyxB3OFoubXUegvi8AWOwwqpkEqi0M8Xxi8";
@@ -50,8 +53,9 @@ public class NsaRouteBuilder extends SpringRouteBuilder {
                     @Override
                     public void process(final Exchange exchange) throws Exception {
                         String body = exchange.getIn().getBody(String.class).trim();
+                        LoggerFactory.getLogger(getClass()).info("NGPP received payment: " + body);
                         String[] parts = body.split(",");
-
+                        
                         String message = "Hei! Du har nettopp mottatt " + parts[2] + " spenn fra " + parts[0] + " på din konto. " + System.currentTimeMillis();
                         System.err.println(parts[1] + ">> " + message);
 

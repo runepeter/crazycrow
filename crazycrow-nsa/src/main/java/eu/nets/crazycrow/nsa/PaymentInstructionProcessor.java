@@ -40,6 +40,8 @@ public class PaymentInstructionProcessor implements Processor {
         String creditId = paymentInstruction.getCreditSocialId();
         String creditAccount = paymentInstruction.getCreditAccount();
 
+        String remittanceInformation = paymentInstruction.getRemittanceInformation();
+        
         BigDecimal amount = paymentInstruction.getAmount();
 
         Source paymentSource = paymentInstruction.getSource();
@@ -60,6 +62,7 @@ public class PaymentInstructionProcessor implements Processor {
         }
 
         buffer.append(" [").append(paymentSource).append("/").append(paymentId).append("]");
+        buffer.append(" [").append(remittanceInformation).append("]");
         logger.info(buffer.toString());
     }
 
