@@ -1,0 +1,10 @@
+1. Filsystemkråking
+	
+	1. Slett innholdet i logs/
+	2. Starter app
+	3. tail log
+	4. Fyll disk (4096)
+	5. Start Twitter
+	6. Send tweet fra @twinocom: @runepeter 100 spenn til en venn #nsa2
+	6. Se at logg stopper opp, prat i vei
+
