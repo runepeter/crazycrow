@@ -31,7 +31,7 @@ public class NsaRouteBuilder extends SpringRouteBuilder {
                 "&consumerSecret=" + CONSUMER_SECRET +
                 "&accessToken=" + ACCESS_TOKEN +
                 "&accessTokenSecret=" + ACCESS_TOKEN_SECRET)
-                .autoStartup(true)
+                .autoStartup(false)
                 .beanRef("twitterPaymentProcessor")
                 .filter(body(PaymentInstruction.class).isNotNull())
                 .to("seda:paymentInstructions");
