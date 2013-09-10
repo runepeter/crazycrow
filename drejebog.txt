@@ -10,12 +10,19 @@
 
 2. OS-kråking
 
+	1. Start app
+	2. Fortell litt om runtime endring av fildeskriptorer
+	3. maxOpenFiles = PID 86 100
+	4. mv os.payments incoming
+
 3. Databasekråking
 
 	1. Start app
+	2. Prat om duplikatkontroll som er skrudd av...
 	2. Forklar litt rundt active connections og received payments
 	3. Sett updateDelayMs = 45000
 	4. Start Camel Twitter route 1
+	5. Følg loggen og prat...
 
 4. Kundekråking
 
