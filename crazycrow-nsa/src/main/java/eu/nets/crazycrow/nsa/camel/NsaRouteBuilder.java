@@ -1,20 +1,24 @@
 package eu.nets.crazycrow.nsa.camel;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.spring.SpringRouteBuilder;
+import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import eu.nets.crazycrow.nsa.PaymentInstruction;
+import eu.nets.crazycrow.nsa.PaymentLoggerService;
 
 @Component
 public class NsaRouteBuilder extends SpringRouteBuilder {
 	
-
+	
     private final Logger logger = LoggerFactory.getLogger(NsaRouteBuilder.class);
 
     private static final String CONSUMER_KEY = "WK2V6RLPZDWifZLs9PTPIQ"; //"yyrw6UYUIZM1VaQW1h5u0w";
@@ -22,8 +26,14 @@ public class NsaRouteBuilder extends SpringRouteBuilder {
     private static final String ACCESS_TOKEN = "15070781-tL7kGGSpGkchNw3eJX3AEkgf7Ng4UrUSgNTklltzc"; //"21330633-M9RUuXXLnttLx8wvVKVNFN2X0glrOUqNwcvPt3spk";
     private static final String ACCESS_TOKEN_SECRET = "gUhGDfQoOCKdysRQ5oJ6nLZZRBdLiCj9FG40YMc70"; //"EukyC6s1qYWaA5QVn9lqkdzUOMHD3W5zkrggSFTiI";
 
+    @Autowired
+    private SessionFactory sessionFactory;
+    
     @Override
     public void configure() throws Exception {
+    	final AtomicInteger ngppCounter = new AtomicInteger(0);
+    	final PaymentLoggerService paymentLoggerService = new PaymentLoggerService(sessionFactory, ngppCounter);
+    	
         from("twitter://search?type=polling" +
                 "&keywords=nsa2" +
                 "&delay=60" +
@@ -43,7 +53,6 @@ public class NsaRouteBuilder extends SpringRouteBuilder {
                 .to("seda:paymentInstructions");
 
         from("seda:paymentInstructions?concurrentConsumers=10")
-        		.tracing()
                 .transacted()
                 .beanRef("paymentInstructionProcessor")
                 .transform(simple("${body.debitSocialId},${body.creditSocialId},${body.amount}"))
@@ -66,6 +75,8 @@ public class NsaRouteBuilder extends SpringRouteBuilder {
                         String body = exchange.getIn().getBody(String.class).trim();
                         LoggerFactory.getLogger(getClass()).info("NGPP received payment: " + body);
                         String[] parts = body.split(",");
+                        
+                        ngppCounter.incrementAndGet();
                         
                         String message = "Hei! Du har nettopp mottatt " + parts[2] + " spenn fra " + parts[0] + " på din konto. " + System.currentTimeMillis();
                         System.err.println(parts[1] + ">> " + message);
@@ -95,7 +106,7 @@ public class NsaRouteBuilder extends SpringRouteBuilder {
 
         from("timer://counter?fixedRate=true&period=5s")
                 .transacted()
-                .beanRef("paymentLoggerService", "doIt");
+                .bean(paymentLoggerService, "doIt");
 
         from("jetty:http://localhost:8081/otp/twitter/callback")
                 .process(new Processor() {
