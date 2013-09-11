@@ -55,7 +55,8 @@ public class NsaRouteBuilder extends SpringRouteBuilder {
         from("seda:paymentInstructions?concurrentConsumers=10")
                 .transacted()
                 .beanRef("paymentInstructionProcessor")
-                .transform(simple("${body.debitSocialId},${body.creditSocialId},${body.amount}"))
+                .setHeader(Exchange.FILE_NAME, simple("${file:name}_${body.id}"))
+                .transform(simple("${body.debitSocialId},${body.creditSocialId},${body.amount}"))                
                 .to("file://ngpp");
 //                .onException(Throwable.class)
 //                .process(new Processor() {
