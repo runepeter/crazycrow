@@ -19,7 +19,7 @@ import com.google.common.collect.Lists;
 
 final public class FilePaymentProcessor implements Processor {
 	
-	private final Logger logger = LoggerFactory.getLogger(FilePaymentProcessor.class);
+	private static final Logger logger = LoggerFactory.getLogger(FilePaymentProcessor.class);
 
 	@Override
 	public void process(Exchange exchange) throws Exception {
